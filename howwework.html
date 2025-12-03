@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How We Work Flow</title>
+
+  <!-- Bootstrap (optional utilities, no Tailwind) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <script src="/_sdk/element_sdk.js"></script>
+
+  <style>
+    body {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      width: 100%;
+      height: 100%;
+      overflow-x: hidden;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    .flow-wrapper {
+      width: 100%;
+      min-height: 100%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flow-wrapper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0, 112, 201, 0.12) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(0, 112, 201, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .flow-wrapper::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image:
+        repeating-linear-gradient(90deg, transparent, transparent 80px, rgba(255, 255, 255, 0.02) 80px, rgba(255, 255, 255, 0.02) 160px),
+        repeating-linear-gradient(0deg, transparent, transparent 80px, rgba(255, 255, 255, 0.02) 80px, rgba(255, 255, 255, 0.02) 160px);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .flow-title {
+      font-size: 48px;
+      font-weight: bold;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 60px;
+      opacity: 0;
+      animation: fadeInDown 0.8s ease forwards;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .flow-title::after {
+      content: attr(data-text);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.8) 50%, transparent 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 3s ease-in-out infinite;
+      z-index: 2;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% center; }
+      100% { background-position: 200% center; }
+    }
+
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .flow-container {
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      gap: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateX(-50px);
+      animation: slideInLeft 0.6s ease forwards;
+      position: relative;
+      transition: all 0.4s ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      box-shadow: 0 20px 60px rgba(118, 75, 162, 0.4);
+    }
+
+    /* step-card positions among connectors:
+       1,3,5,7,9 in DOM → use nth-of-type odd mapping */
+    .step-card:nth-of-type(1) { animation-delay: 0s; }
+    .step-card:nth-of-type(3) { animation-delay: 0.2s; }
+    .step-card:nth-of-type(5) { animation-delay: 0.4s; }
+    .step-card:nth-of-type(7) { animation-delay: 0.6s; }
+    .step-card:nth-of-type(9) { animation-delay: 0.8s; }
+
+    @keyframes slideInLeft {
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .step-icon {
+      min-width: 100px;
+      width: 100px;
+      height: 100px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: pulseGlow 3s ease-in-out infinite;
+      box-shadow: 0 0 0 0 rgba(118, 75, 162, 0.7);
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(118, 75, 162, 0.7);
+      }
+      50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 20px rgba(118, 75, 162, 0);
+      }
+    }
+
+    .step-icon svg {
+      width: 50px;
+      height: 50px;
+      fill: #ffffff;
+      animation: iconFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes iconFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-5px) rotate(-3deg); }
+      75% { transform: translateY(5px) rotate(3deg); }
+    }
+
+    .step-content { flex: 1; }
+
+    .step-number {
+      font-size: 14px;
+      font-weight: 600;
+      color: #764ba2;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .step-heading {
+      font-size: 28px;
+      font-weight: bold;
+      color: #2d3748;
+      margin-bottom: 12px;
+    }
+
+    .step-description {
+      font-size: 18px;
+      color: #4a5568;
+      line-height: 1.6;
+    }
+
+    .connector {
+      width: 4px;
+      height: 40px;
+      background: linear-gradient(to bottom, #667eea, #764ba2);
+      margin: 0 auto;
+      position: relative;
+      left: -50%;
+      margin-left: 50px;
+      opacity: 0;
+      animation: fadeIn 0.6s ease forwards, flowDown 2s ease-in-out infinite;
+      overflow: hidden;
+    }
+
+    .connector::before {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.6), transparent);
+      animation: flowLight 3s ease-in-out infinite;
+    }
+
+    @keyframes flowLight {
+      0% { top: -100%; }
+      100% { top: 200%; }
+    }
+
+    @keyframes flowDown {
+      0%, 100% { transform: scaleY(1); }
+      50% { transform: scaleY(1.1); }
+    }
+
+    .connector:nth-of-type(2) { animation-delay: 0.3s, 0s; }
+    .connector:nth-of-type(4) { animation-delay: 0.5s, 0.5s; }
+    .connector:nth-of-type(6) { animation-delay: 0.7s, 1s; }
+    .connector:nth-of-type(8) { animation-delay: 0.9s, 1.5s; }
+
+    .connector:nth-of-type(2)::before { animation-delay: 0.2s; }
+    .connector:nth-of-type(4)::before { animation-delay: 0.7s; }
+    .connector:nth-of-type(6)::before { animation-delay: 1.2s; }
+    .connector:nth-of-type(8)::before { animation-delay: 1.7s; }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    @view-transition { navigation: auto; }
+
+    @media (max-width: 768px) {
+      .flow-wrapper {
+        padding: 40px 20px;
+      }
+
+      .flow-title {
+        font-size: 32px;
+        margin-bottom: 40px;
+      }
+
+      .step-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 30px 20px;
+      }
+
+      .step-icon {
+        min-width: 80px;
+        width: 80px;
+        height: 80px;
+      }
+
+      .step-icon svg {
+        width: 40px;
+        height: 40px;
+      }
+
+      .step-heading {
+        font-size: 22px;
+      }
+
+      .step-description {
+        font-size: 16px;
+      }
+
+      .connector {
+        left: 50%;
+        margin-left: -2px;
+      }
+    }
+  </style>
+
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+
+    <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="bg-navy text-white">
+  <!-- top bar -->
+  <div class="container-fluid container-lg py-1 px-3 d-flex flex-wrap justify-content-between gap-2 small top-bar">
+    <div>
+      Call:
+      <a class="text-decoration-none text-light" href="tel:+919151060661">+91 9151060661</a> ·
+      <a class="text-decoration-none text-light" href="tel:+919151060669">+91 9151060669</a>
+    </div>
+    <div>
+      Email:
+      <a class="text-decoration-none text-light" href="mailto:sales@shaktitechnical.com">sales@shaktitechnical.com</a>
+    </div>
+  </div>
+
+  <!-- brand row -->
+  <div class="container-lg py-3 px-3 d-flex align-items-center gap-3 bg-white text-navy brand-row rounded-3">
+    <div class="brand-logo flex-shrink-0"></div>
+    <div class="brand-text">
+      <h1 class="h5 mb-0 fw-bold">Shakti Technical Training and Welfare Society</h1>
+    </div>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-navy border-top border-opacity-25 border-light" aria-label="Main navigation">
+    <div class="container-lg px-3">
+      <a class="navbar-brand d-lg-none" href="#home">Shakti Technical</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primary-nav"
+              aria-controls="primary-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="primary-nav">
+        <ul class="navbar-nav mb-2 mb-lg-0 gap-lg-3">
+          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#intro">Introduction</a></li>
+          <li class="nav-item"><a class="nav-link" href="#courses">Training Programs</a></li>
+          <li class="nav-item"><a class="nav-link" href="#placement">Interviews</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="flow-wrapper">
+  <h1 class="flow-title" id="mainTitle" data-text="How We Work">How We Work</h1>
+  <div class="flow-container">
+    <div class="step-card">
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.59l2.2-2.21c.28-.26.36-.65.25-1C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/>
+        </svg>
+      </div>
+      <div class="step-content">
+        <div class="step-number">Step 1</div>
+        <h2 class="step-heading" id="step1Heading">Requirement Received</h2>
+        <p class="step-description" id="step1Desc">Client Contacts Us → Shares Trade &amp; Skill Requirements</p>
+      </div>
+    </div>
+
+    <div class="connector"></div>
+
+    <div class="step-card">
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+        </svg>
+      </div>
+      <div class="step-content">
+        <div class="step-number">Step 2</div>
+        <h2 class="step-heading" id="step2Heading">Assessment</h2>
+        <p class="step-description" id="step2Desc">We Review the Requirement → Confirm Candidate Availability</p>
+      </div>
+    </div>
+
+    <div class="connector"></div>
+
+    <div class="step-card">
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+        </svg>
+      </div>
+      <div class="step-content">
+        <div class="step-number">Step 3</div>
+        <h2 class="step-heading" id="step3Heading">Interview Scheduling</h2>
+        <p class="step-description" id="step3Desc">Interview Date Finalised → Facility Prepared for Testing</p>
+      </div>
+    </div>
+
+    <div class="connector"></div>
+
+    <div class="step-card">
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+        </svg>
+      </div>
+      <div class="step-content">
+        <div class="step-number">Step 4</div>
+        <h2 class="step-heading" id="step4Heading">Interview &amp; Trade Test</h2>
+        <p class="step-description" id="step4Desc">Client Conducts Interviews at Our Testing Centre</p>
+      </div>
+    </div>
+
+    <div class="connector"></div>
+
+    <div class="step-card">
+      <div class="step-icon">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+        </svg>
+      </div>
+      <div class="step-content">
+        <div class="step-number">Step 5</div>
+        <h2 class="step-heading" id="step5Heading">Post-Interview Support</h2>
+        <p class="step-description" id="step5Desc">We Assist with Documentation for Selected Candidates</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const defaultConfig = {
+    main_title: "How We Work",
+    step_1_heading: "Requirement Received",
+    step_1_desc: "Client Contacts Us → Shares Trade & Skill Requirements",
+    step_2_heading: "Assessment",
+    step_2_desc: "We Review the Requirement → Confirm Candidate Availability",
+    step_3_heading: "Interview Scheduling",
+    step_3_desc: "Interview Date Finalised → Facility Prepared for Testing",
+    step_4_heading: "Interview & Trade Test",
+    step_4_desc: "Client Conducts Interviews at Our Testing Centre",
+    step_5_heading: "Post-Interview Support",
+    step_5_desc: "We Assist with Documentation for Selected Candidates",
+    background_color: "#04152A",
+    card_color: "#F5F5F7",
+    text_color: "#1F2933",
+    accent_color: "#0070C9",
+    font_family: "Segoe UI",
+    font_size: 16
+  };
+
+  async function onConfigChange(config) {
+    const baseSize = config.font_size || defaultConfig.font_size;
+    const customFont = config.font_family || defaultConfig.font_family;
+    const fontStack = `${customFont}, Tahoma, Geneva, Verdana, sans-serif`;
+
+    const mainTitle = document.getElementById('mainTitle');
+    mainTitle.textContent = config.main_title || defaultConfig.main_title;
+    mainTitle.setAttribute('data-text', config.main_title || defaultConfig.main_title);
+    mainTitle.style.fontFamily = fontStack;
+    mainTitle.style.fontSize = `${baseSize * 3}px`;
+
+    document.getElementById('step1Heading').textContent = config.step_1_heading || defaultConfig.step_1_heading;
+    document.getElementById('step1Desc').textContent = config.step_1_desc || defaultConfig.step_1_desc;
+
+    document.getElementById('step2Heading').textContent = config.step_2_heading || defaultConfig.step_2_heading;
+    document.getElementById('step2Desc').textContent = config.step_2_desc || defaultConfig.step_2_desc;
+
+    document.getElementById('step3Heading').textContent = config.step_3_heading || defaultConfig.step_3_heading;
+    document.getElementById('step3Desc').textContent = config.step_3_desc || defaultConfig.step_3_desc;
+
+    document.getElementById('step4Heading').textContent = config.step_4_heading || defaultConfig.step_4_heading;
+    document.getElementById('step4Desc').textContent = config.step_4_desc || defaultConfig.step_4_desc;
+
+    document.getElementById('step5Heading').textContent = config.step_5_heading || defaultConfig.step_5_heading;
+    document.getElementById('step5Desc').textContent = config.step_5_desc || defaultConfig.step_5_desc;
+
+    const headings = document.querySelectorAll('.step-heading');
+    headings.forEach(heading => {
+      heading.style.fontFamily = fontStack;
+      heading.style.fontSize = `${baseSize * 1.75}px`;
+      heading.style.color = config.text_color || defaultConfig.text_color;
+    });
+
+    const descriptions = document.querySelectorAll('.step-description');
+    descriptions.forEach(desc => {
+      desc.style.fontFamily = fontStack;
+      desc.style.fontSize = `${baseSize * 1.125}px`;
+    });
+
+    const stepNumbers = document.querySelectorAll('.step-number');
+    stepNumbers.forEach(num => {
+      num.style.fontFamily = fontStack;
+      num.style.fontSize = `${baseSize * 0.875}px`;
+      num.style.color = config.accent_color || defaultConfig.accent_color;
+    });
+
+    const wrapper = document.querySelector('.flow-wrapper');
+    wrapper.style.background = `linear-gradient(135deg, ${config.background_color || defaultConfig.background_color} 0%, ${config.accent_color || defaultConfig.accent_color} 100%)`;
+
+    const cards = document.querySelectorAll('.step-card');
+    cards.forEach(card => {
+      card.style.background = config.card_color || defaultConfig.card_color;
+    });
+
+    const icons = document.querySelectorAll('.step-icon');
+    icons.forEach(icon => {
+      icon.style.background = `linear-gradient(135deg, ${config.background_color || defaultConfig.background_color} 0%, ${config.accent_color || defaultConfig.accent_color} 100%)`;
+    });
+
+    const connectors = document.querySelectorAll('.connector');
+    connectors.forEach(connector => {
+      connector.style.background = `linear-gradient(to bottom, ${config.background_color || defaultConfig.background_color}, ${config.accent_color || defaultConfig.accent_color})`;
+    });
+  }
+
+  function mapToCapabilities(config) {
+    return {
+      recolorables: [
+        {
+          get: () => config.background_color || defaultConfig.background_color,
+          set: (value) => {
+            if (window.elementSdk) {
+              window.elementSdk.config.background_color = value;
+              window.elementSdk.setConfig({ background_color: value });
+            }
+          }
+        },
+        {
+          get: () => config.card_color || defaultConfig.card_color,
+          set: (value) => {
+            if (window.elementSdk) {
+              window.elementSdk.config.card_color = value;
+              window.elementSdk.setConfig({ card_color: value });
+            }
+          }
+        },
+        {
+          get: () => config.text_color || defaultConfig.text_color,
+          set: (value) => {
+            if (window.elementSdk) {
+              window.elementSdk.config.text_color = value;
+              window.elementSdk.setConfig({ text_color: value });
+            }
+          }
+        },
+        {
+          get: () => config.accent_color || defaultConfig.accent_color,
+          set: (value) => {
+            if (window.elementSdk) {
+              window.elementSdk.config.accent_color = value;
+              window.elementSdk.setConfig({ accent_color: value });
+            }
+          }
+        }
+      ],
+      borderables: [],
+      fontEditable: {
+        get: () => config.font_family || defaultConfig.font_family,
+        set: (value) => {
+          if (window.elementSdk) {
+            window.elementSdk.config.font_family = value;
+            window.elementSdk.setConfig({ font_family: value });
+          }
+        }
+      },
+      fontSizeable: {
+        get: () => config.font_size || defaultConfig.font_size,
+        set: (value) => {
+          if (window.elementSdk) {
+            window.elementSdk.config.font_size = value;
+            window.elementSdk.setConfig({ font_size: value });
+          }
+        }
+      }
+    };
+  }
+
+  function mapToEditPanelValues(config) {
+    return new Map([
+      ["main_title", config.main_title || defaultConfig.main_title],
+      ["step_1_heading", config.step_1_heading || defaultConfig.step_1_heading],
+      ["step_1_desc", config.step_1_desc || defaultConfig.step_1_desc],
+      ["step_2_heading", config.step_2_heading || defaultConfig.step_2_heading],
+      ["step_2_desc", config.step_2_desc || defaultConfig.step_2_desc],
+      ["step_3_heading", config.step_3_heading || defaultConfig.step_3_heading],
+      ["step_3_desc", config.step_3_desc || defaultConfig.step_3_desc],
+      ["step_4_heading", config.step_4_heading || defaultConfig.step_4_heading],
+      ["step_4_desc", config.step_4_desc || defaultConfig.step_4_desc],
+      ["step_5_heading", config.step_5_heading || defaultConfig.step_5_heading],
+      ["step_5_desc", config.step_5_desc || defaultConfig.step_5_desc]
+    ]);
+  }
+
+  if (window.elementSdk) {
+    window.elementSdk.init({
+      defaultConfig,
+      onConfigChange,
+      mapToCapabilities,
+      mapToEditPanelValues
+    });
+  }
+</script>
+
+<!-- Optional Bootstrap JS bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Shakti Technical Training and Welfare Society</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+        content="Shakti Technical Training and Welfare Society provides technical training and skilled manpower recruitment with welfare support from Kasia, Kushinagar.">
+  <meta name="robots" content="index,follow">
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<a href="#main" class="sr-only">Skip to main content</a>
+
+<header class="bg-navy text-white">
+  <!-- top bar -->
+  <div class="container-fluid container-lg py-1 px-3 d-flex flex-wrap justify-content-between gap-2 small top-bar">
+    <div>
+      Call:
+      <a class="text-decoration-none text-light" href="tel:+919151060661">+91 9151060661</a> ·
+      <a class="text-decoration-none text-light" href="tel:+919151060669">+91 9151060669</a>
+    </div>
+    <div>
+      Email:
+      <a class="text-decoration-none text-light" href="mailto:sales@shaktitechnical.com">sales@shaktitechnical.com</a>
+    </div>
+  </div>
+
+  <!-- brand row -->
+  <div class="container-lg py-3 px-3 d-flex align-items-center gap-3 bg-white text-navy brand-row rounded-3">
+    <div class="brand-logo flex-shrink-0"></div>
+    <div class="brand-text">
+      <h1 class="h5 mb-0 fw-bold">Shakti Technical Training and Welfare Society</h1>
+    </div>
+  </div>
+
+  <!-- navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-navy border-top border-opacity-25 border-light" aria-label="Main navigation">
+    <div class="container-lg px-3">
+      <a class="navbar-brand d-lg-none" href="#home">Shakti Technical</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primary-nav"
+              aria-controls="primary-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="primary-nav">
+        <ul class="navbar-nav mb-2 mb-lg-0 gap-lg-3">
+          <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="#intro">Introduction</a></li>
+          <li class="nav-item"><a class="nav-link" href="#courses">Training Programs</a></li>
+          <li class="nav-item"><a class="nav-link" href="#placement">Interviews</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+<main id="main" class="bg-light">
+  <!-- HERO WITH VIDEO -->
+  <section class="hero position-relative overflow-hidden text-white my-0 mx-2 mx-lg-auto rounded-0" id="home">
+    <div class="hero-media position-absolute top-0 start-0 w-100 h-100">
+      <video class="hero-video w-100 h-100" autoplay muted loop playsinline poster="images/hero-poster.jpg">
+        <source src="videos/shakti-hero.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+
+  </section>
+</main>
+
+<footer id="contact" class="border-top bg-white text-muted py-4">
+  <div class="container-lg text-center small">
+    <p class="mb-1"><strong class="text-navy">Shakti Technical Training and Welfare Society</strong></p>
+    <p class="mb-1">Sapaha Road, near Amit Memorial School, Kasia, Kushinagar, Uttar Pradesh 274402</p>
+    <p class="mb-1">Phone: +91 9151060661, +91 9151060669 · Email: sales@shaktitechnical.com</p>
+    <p class="mb-0">© <span id="year"></span> Shakti Technical Training and Welfare Society. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- Bootstrap JS bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Your small script -->
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
